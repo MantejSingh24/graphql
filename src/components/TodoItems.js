@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, StyleSheet, TouchableOpacity, Alert} from 'react-native';
+import {Text, View, StyleSheet} from 'react-native';
 
 const TodoItem = ({id, title, user}) => (
   <View>

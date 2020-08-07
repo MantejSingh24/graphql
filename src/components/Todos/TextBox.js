@@ -1,5 +1,6 @@
 import {gql, ApolloProvider} from '@apollo/client';
 import {Mutation} from '@apollo/client/react/components';
+import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 
 import React, {Component} from 'react';
 import {
@@ -10,7 +11,7 @@ import {
   View,
 } from 'react-native';
 import client1 from '../../graphql/Client1';
-import FETCH_TODOS from '../../graphql/Queries1';
+import {FETCH_TODOS} from '../../graphql/Queries1';
 
 export const INSERT_TODO = gql`
   mutation($text: String!) {
@@ -38,19 +39,13 @@ export default class TextBox extends Component {
     };
   }
 
-  submit = () => {
-    this.setState({text: ''});
-    insertTodo({
-      variables: {text},
-    });
-  };
   render() {
     return (
       <ApolloProvider client={client1}>
         <Mutation
           mutation={INSERT_TODO}
           refetchQueries={[{query: FETCH_TODOS}]}>
-          {(addDogMutation, {data}) => (
+          {(addMutation, {data}) => (
             <View style={styles.inputContainer}>
               <View style={styles.textboxContainer}>
                 <TextInput
@@ -64,12 +59,12 @@ export default class TextBox extends Component {
                 <TouchableOpacity
                   style={styles.button}
                   onPress={() => {
-                    addDogMutation({
+                    addMutation({
                       variables: {
                         text: this.state.text,
                       },
                     })
-                      .then((res) => console.log(res))
+                      .then((res) => console.log(res.data))
                       .catch((err) => <Text>{err}</Text>);
                     this.setState({text: ''});
                   }}>

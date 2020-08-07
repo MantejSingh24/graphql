@@ -2,13 +2,18 @@ import React, {Component} from 'react';
 import {
   StyleSheet,
   Text,
-  ScrollView,
   View,
-  ActivityIndicator,
   FlatList,
+  TouchableHighlight,
 } from 'react-native';
+import {ApolloProvider} from '@apollo/client';
+
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
 import client1 from '../graphql/Client1';
-import FETCH_TODOS from '../graphql/Queries1';
+import {FETCH_TODOS, REMOVE_TODO} from '../graphql/Queries1';
+import {Mutation} from '@apollo/client/react/components';
+
 import TodoItems from '../components/TodoItems';
 
 export default class NewOne extends Component {
@@ -18,8 +23,21 @@ export default class NewOne extends Component {
     this.state = {
       titles: [],
     };
+    this.requestHeadlines = this.requestHeadlines.bind(this);
   }
+  deleteItemById = (id) => {
+    console.log(id);
+    const updateCache = () => {
+      const data = client1.readQuery({
+        query: FETCH_TODOS,
+      });
 
+      const filteredData = data.todos.filter((...item) => item.id !== id);
+      this.setState({titles: filteredData});
+      console.log(data);
+    };
+    this.componentDidMount();
+  };
   componentDidMount() {
     this.requestHeadlines();
   }
@@ -32,7 +50,6 @@ export default class NewOne extends Component {
         this.setState({
           titles: response.data.todos,
         });
-        console.log(response.data.todos);
       })
       .catch((error) => {
         console.log('ERROR ==>', error);
@@ -43,11 +60,41 @@ export default class NewOne extends Component {
     return (
       <View>
         <View style={styles.contentContainer}>
-          <FlatList
-            data={this.state.titles}
-            renderItem={({item}) => <TodoItems {...item} />}
-            keyExtractor={(item, index) => 'key' + index}
-          />
+          <View>
+            <ApolloProvider client={client1}>
+              <Mutation
+                mutation={REMOVE_TODO}
+                refetchQueries={[{query: FETCH_TODOS}]}>
+                {(deleteMutation, {data}) => (
+                  <FlatList
+                    data={this.state.titles}
+                    keyExtractor={({...item}) => item.id.toString()}
+                    renderItem={({item}) => (
+                      <View style={{flex: 1, flexDirection: 'row'}}>
+                        <TouchableHighlight
+                          onPress={() => {
+                            deleteMutation({
+                              variables: {
+                                id: item.id,
+                              },
+                            })
+                              .then(
+                                (res) => console.log(res),
+                                this.deleteItemById(item.id),
+                              )
+                              .catch((err) => <Text>{err}</Text>);
+                          }}>
+                          <Icon name="delete" size={40} color={'#BC0000'} />
+                        </TouchableHighlight>
+
+                        <TodoItems {...item} />
+                      </View>
+                    )}
+                  />
+                )}
+              </Mutation>
+            </ApolloProvider>
+          </View>
         </View>
       </View>
     );
