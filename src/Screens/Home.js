@@ -7,6 +7,8 @@ import {
   FlatList,
   Button,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+
 import client from '../graphql/Client';
 import Headlines from '../graphql/Queries';
 import Article from '../components/Article';

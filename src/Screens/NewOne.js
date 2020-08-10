@@ -27,16 +27,17 @@ export default class NewOne extends Component {
   }
   deleteItemById = (id) => {
     console.log(id);
-    const updateCache = () => {
-      const data = client1.readQuery({
-        query: FETCH_TODOS,
-      });
 
-      const filteredData = data.todos.filter((...item) => item.id !== id);
-      this.setState({titles: filteredData});
-      console.log(data);
-    };
-    this.componentDidMount();
+    client1
+      .query({
+        query: FETCH_TODOS,
+      })
+      .then((response) => {
+        const filter = response.data.todos.filter((x) => x.id !== id);
+
+        console.log(filter);
+        this.setState({titles: filter});
+      });
   };
   componentDidMount() {
     this.requestHeadlines();
