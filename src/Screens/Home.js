@@ -62,7 +62,6 @@ export default class Home extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>Headlines App</Text>
           <Button
             title="Go to Todos"
             onPress={() => this.props.navigation.navigate('NewOne')}
@@ -70,6 +69,10 @@ export default class Home extends Component {
           <Button
             title="Add todo"
             onPress={() => this.props.navigation.navigate('TextBox')}
+          />
+          <Button
+            title="Online Users"
+            onPress={() => this.props.navigation.navigate('Online')}
           />
         </View>
         <View style={styles.contentContainer}>

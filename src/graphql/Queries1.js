@@ -20,4 +20,15 @@ const REMOVE_TODO = gql`
     }
   }
 `;
-export {FETCH_TODOS, REMOVE_TODO};
+const SUBSCRIBE_TO_ONLINE_USERS = gql`
+  subscription {
+    online_users(order_by: {user: {name: asc}}) {
+      user {
+        name
+        id
+      }
+      id
+    }
+  }
+`;
+export {FETCH_TODOS, REMOVE_TODO, SUBSCRIBE_TO_ONLINE_USERS};
