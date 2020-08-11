@@ -68,19 +68,17 @@ export default class Online extends Component {
           subscription={gql`
             ${SUBSCRIBE_TO_ONLINE_USERS}
           `}>
-          <View>
-            <View style={styles.contentContainer}>
-              <View>
-                <FlatList
-                  data={this.state.titles}
-                  keyExtractor={({...item}) => item.id.toString()}
-                  renderItem={({item}) => (
-                    <View style={{flex: 1, flexDirection: 'row'}}>
-                      <TodoItems {...item} />
-                    </View>
-                  )}
-                />
-              </View>
+          <View style={styles.contentContainer}>
+            <View>
+              <FlatList
+                data={this.state.titles}
+                keyExtractor={({...item}) => item.id.toString()}
+                renderItem={({item}) => (
+                  <View style={{flex: 1, flexDirection: 'row'}}>
+                    <TodoItems {...item} />
+                  </View>
+                )}
+              />
             </View>
           </View>
         </Subscription>
