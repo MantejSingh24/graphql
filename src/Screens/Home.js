@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   FlatList,
   Button,
+  Animated,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
